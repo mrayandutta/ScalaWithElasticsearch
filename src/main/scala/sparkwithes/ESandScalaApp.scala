@@ -1,5 +1,6 @@
 package sparkwithes
 
+import org.elasticsearch.action.get.GetResponse
 import org.elasticsearch.client.transport.TransportClient
 import org.elasticsearch.common.transport.InetSocketTransportAddress
 
@@ -13,13 +14,22 @@ object ESandScalaApp extends App
   val transportClient = new TransportClient();
   transportClient.addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
 
+  /*
   val jsons = Source.fromFile("src/main/resources/sample.json").getLines().toList
-  for (i <- 1 to jsons.length) {
+  for (i <- 1 to jsons.length)
+  {
     indexJson(jsons(i - 1), i.toString)
   }
+  */
 
   def indexJson(json: String, id: String) =
   {
     transportClient.prepareIndex("esa", "activityStream", id).setSource(json).execute().actionGet()
+  }
+
+  def get(json: String, id: String) =
+  {
+    //GetResponse res = transportClient.prepareGet("esa", "activityStream", id).execute().actionGet()
+    GetResponse getResponse = transportClient.prepareGet("kodcucom", "article", "1").execute().actionGet()
   }
 }
